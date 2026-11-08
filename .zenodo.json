@@ -1,0 +1,39 @@
+{
+  "upload_type": "software",
+  "title": "Galvanic body-coupled channel: population model and simulator",
+  "creators": [
+    {
+      "name": "Ormanis, Juris",
+      "affiliation": "Institute of Electronics and Computer Science",
+      "orcid": "0000-0003-2336-7115"
+    }
+  ],
+  "description": "<p>Generative population model of the galvanic body-coupled communication channel at the 50 Ohm receiver termination, 0.6-20 MHz, for network simulation. Gain of a link = mean layer + body term (shared by the links of one body) + link term, in the mean-plus-spread form of the radio channels of the IEEE 802.15.6 channel-model document. The mean layer is the population-mean table plus a site term set by the typical circumferences of the two electrode sites, so any pair of the twelve measured sites can be drawn; a reference mean measured elsewhere can replace the table. The body term and the link term are normal, each with a four-eigencurve covariance over frequency. Fitted on 521 links of 30 participants and tested on persons left out of the fit. Contains the parameter table (params.json), a Python generator that draws bodies (popmodel.py), its test, and the Castalia/OMNeT++ export script. The repository also holds the coexistence simulator with its tests and its model checking. It holds scripts: no measurements and no results. The only data files are the parameter tables the code starts from. The measurements are the open dataset at DOI 10.5281/zenodo.8214497.</p>",
+  "keywords": [
+    "body-coupled communication",
+    "galvanic coupling",
+    "body area network",
+    "IEEE 802.15.6",
+    "channel model",
+    "network simulation",
+    "Castalia",
+    "OMNeT++"
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.8214497",
+      "relation": "isDerivedFrom",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1016/j.dib.2023.109892",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    }
+  ]
+}

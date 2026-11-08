@@ -1,0 +1,1414 @@
+{
+ "meta": {
+  "record": "python_simulation/coexistence/PARAMETERS.md",
+  "units": "time us, power dBm, gain/loss dB, current mA, charge uC unless the key says otherwise",
+  "acr_tables": "keys are carrier offsets in MHz; the largest key applies to all larger offsets",
+  "marks": "see PARAMETERS.md; every value here has a mark and a source there"
+ },
+ "common": {
+  "thermal_noise_dBm_per_Hz": -174,
+  "vdd_V": 3,
+  "interference_modes": [
+   "collision",
+   "sinr"
+  ],
+  "collision_rule": "any time overlap on the same channel destroys all overlapping frames",
+  "residual_per": "from the protocol BER model at the nominal link SNR",
+  "legacy_ble_sim_residual_per": {
+   "1M": 0.0001,
+   "2M": 0.001
+  },
+  "deadline": "one sample period",
+  "traffic": "uplink only, one payload per sample period per sensor",
+  "clock_ppm": {
+   "ble": 50,
+   "ant": 50,
+   "smartban": 20,
+   "ieee802154": 40
+  },
+  "fade_redraw_after_us": 20000
+ },
+ "ble5": {
+  "phy": {
+   "1M": {
+    "airtime_fixed_us": 80,
+    "airtime_per_octet_us": 8,
+    "noise_bw_Hz": 1000000,
+    "sens_spec_dBm": -70,
+    "sens_nrf52840_dBm": -95,
+    "ci_co_spec_dB": 21,
+    "ci_co_nrf52840_dB": 6,
+    "acr_spec_dB": {
+     "1": 6,
+     "2": 38,
+     "3": 48
+    },
+    "ramp_tx_dis_us": 6
+   },
+   "2M": {
+    "airtime_fixed_us": 44,
+    "airtime_per_octet_us": 4,
+    "noise_bw_Hz": 2000000,
+    "sens_spec_dBm": -70,
+    "sens_nrf52840_dBm": -92,
+    "ci_co_spec_dB": 21,
+    "ci_co_nrf52840_dB": 6.8,
+    "acr_spec_dB": {
+     "2": 6,
+     "4": 38,
+     "6": 48
+    },
+    "ramp_tx_dis_us": 4
+   },
+   "coded_s2": {
+    "airtime_fixed_us": 462,
+    "airtime_per_octet_us": 16,
+    "noise_bw_Hz": 1000000,
+    "sens_spec_dBm": -75,
+    "sens_nrf52840_dBm": -99,
+    "ci_co_spec_dB": 17,
+    "acr_spec_dB": {
+     "1": 6,
+     "2": 38,
+     "3": 48
+    },
+    "extra_loss_dB": 0,
+    "chip_gain": 1
+   },
+   "coded_s8": {
+    "airtime_fixed_us": 720,
+    "airtime_per_octet_us": 64,
+    "noise_bw_Hz": 1000000,
+    "sens_spec_dBm": -82,
+    "sens_nrf52840_dBm": -103,
+    "ci_co_spec_dB": 12,
+    "ci_co_nrf52840_dB": 4.4,
+    "acr_spec_dB": {
+     "1": 6,
+     "2": 38,
+     "3": 48
+    },
+    "extra_loss_dB": 2.7,
+    "chip_gain": 4
+   }
+  },
+  "access_address_bits": 32,
+  "header_bits": 16,
+  "crc_bits": 24,
+  "bits_at_risk": "72 + 8*L",
+  "coded_block1_bits": 34,
+  "payload_max_octets": 251,
+  "payload_max_no_dle_octets": 27,
+  "mic_octets": 4,
+  "l2cap_att_overhead_octets": 7,
+  "l2cap_att_overhead_default": false,
+  "t_ifs_us": 150,
+  "ci_step_us": 1250,
+  "ci_min_us": 7500,
+  "ci_max_us": 4000000,
+  "supervision_timeout": "max(2 s, 3*CI) rounded up to 10 ms, within 100 ms..32 s",
+  "reconnect_delay_us": 100000,
+  "clock_active_ppm": 50,
+  "clock_sleep_ppm": 500,
+  "jitter_us": 16,
+  "window_widening": "(SCA_central + SCA_peripheral) * time_since_anchor, each side",
+  "n_data_channels": 37,
+  "channel_freq_MHz": "idx<=10: 2404+2*idx; idx>=11: 2428+2*(idx-11)",
+  "hop_increment_range": [
+   5,
+   16
+  ],
+  "csa2_selftest": [
+   {
+    "chanId": "0x305F",
+    "used": "all",
+    "counters": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "channels": [
+     25,
+     20,
+     6,
+     21
+    ]
+   },
+   {
+    "chanId": "0x305F",
+    "used": [
+     9,
+     10,
+     21,
+     22,
+     23,
+     33,
+     34,
+     35,
+     36
+    ],
+    "counters": [
+     6,
+     7,
+     8
+    ],
+    "channels": [
+     23,
+     9,
+     34
+    ]
+   }
+  ],
+  "csa1_selftest": {
+   "hop_increment": 10,
+   "removed_channel": 11,
+   "instant": 100,
+   "events": [
+    99,
+    100,
+    101
+   ],
+   "channels": [
+    1,
+    12,
+    21
+   ]
+  },
+  "afh": {
+   "window": 20,
+   "pdr_threshold": 0.95,
+   "c_min": 10,
+   "spec_min_used": 2,
+   "instant_offset_events": 6,
+   "instant_from": "first transmission",
+   "map_ind_payload_octets": 8,
+   "owl_speedup": false
+  },
+  "coded_code": {
+   "K": 4,
+   "rate": 0.5,
+   "G0": "1+x+x^2+x^3",
+   "G1": "1+x^2+x^3",
+   "dfree": 6,
+   "d": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "A_d": [
+    1,
+    3,
+    5,
+    11,
+    25,
+    55,
+    121,
+    267,
+    589
+   ],
+   "B_d": [
+    2,
+    7,
+    18,
+    49,
+    130,
+    333,
+    836,
+    2069,
+    5060
+   ]
+  },
+  "ber": {
+   "curve_default": "a: Pb = 0.5*exp(-g/2)",
+   "curve_conservative": "b: correlated noncoherent FSK, |rho| = sin(pi*h)/(pi*h), h = 0.5",
+   "nf_plus_limpl_dB": {
+    "curve_a_nrf52840": 8.1,
+    "curve_b_nrf52840": 4.7,
+    "curve_a_nrf52832": 7.1
+   },
+   "gamma_1e-3_dB": {
+    "curve_a": 10.94,
+    "curve_b_h0.45": 15.1,
+    "curve_b_h0.50": 14.31,
+    "curve_b_h0.55": 13.63
+   }
+  },
+  "tx_power_dBm": 0,
+  "ramp_us": {
+   "normal": 140,
+   "fast": 40
+  },
+  "full": {
+   "transport": "ACL",
+   "csa": 2,
+   "arq": "unlimited until ack, deadline or supervision timeout",
+   "afh": true,
+   "phy_runs": [
+    "2M",
+    "1M"
+   ],
+   "coded_case": "FULL+ flag",
+   "f11_flag": false
+  },
+  "fair": {
+   "transport": "B: BIS-like single shot, uplink only",
+   "transport_option": "A: CIS-like, poll + T_IFS + data",
+   "csa": 1,
+   "csa_option": 2,
+   "strip_f6_option": "one random fixed channel per BAN",
+   "arq": false,
+   "afh": false,
+   "phy_runs": [
+    "1M",
+    "2M"
+   ]
+  }
+ },
+ "ieee802154_phy": {
+  "channels": "k=11..26, fc = 2405+5*(k-11) MHz",
+  "bit_rate_bps": 250000,
+  "chip_rate_cps": 2000000,
+  "symbol_us": 16,
+  "octet_us": 32,
+  "airtime": "(6 + L_psdu)*32 us",
+  "shr_phr_octets": 6,
+  "mhr_octets": 9,
+  "fcs_octets": 2,
+  "payload_max_octets": 116,
+  "psdu_max_octets": 127,
+  "imm_ack_psdu_octets": 5,
+  "imm_ack_us": 352,
+  "noise_bw_Hz": 2000000,
+  "ber": "(8/15)*(1/16)*sum_{k=2..16} (-1)^k*C(16,k)*exp(20*SINR*(1/k-1)); feed SINR, Eb/N0 = 5*SINR",
+  "sinr_per1pct_20oct_dB": 0.4,
+  "preamble_drop_sinr_dB": -5,
+  "nf_plus_limpl_dB": {
+   "nrf52840": 10.6,
+   "at86rf233": 9.6,
+   "cc2420": 15.6,
+   "spec": 25.6
+  },
+  "sens_dBm": {
+   "spec": -85,
+   "nrf52840": -100,
+   "cc2652r": -99,
+   "cc2420": -95,
+   "at86rf233": -101
+  },
+  "ci_co_dB": 3,
+  "acr_chip_dB": {
+   "5": 33,
+   "10": 48,
+   "15": 54
+  },
+  "acr_spec_dB": {
+   "5": 0,
+   "10": 30
+  },
+  "tx_power_dBm": 0
+ },
+ "ieee802154_csma": {
+  "turnaround_us": 192,
+  "unit_backoff_us": 320,
+  "cca_us": 128,
+  "ack_wait_us": 864,
+  "ack_delay_us": 192,
+  "sifs_us": 192,
+  "lifs_us": 640,
+  "max_sifs_frame_octets": 18,
+  "mac_min_be": 3,
+  "mac_max_be": 5,
+  "mac_max_csma_backoffs": 4,
+  "mac_max_frame_retries": 3,
+  "ed_threshold_dBm": -75,
+  "queue_depth": 4,
+  "queue_drop": "newest",
+  "beacon": {
+   "base_superframe_us": 15360,
+   "slots": 16,
+   "min_cap_symbols": 440,
+   "max_gts": 7,
+   "max_lost_beacons": 4,
+   "beacon_psdu_octets": "13 + (1 + 3*n_gts if n_gts > 0 else 0)",
+   "bi": "15360 us * 2^BO, 0<=SO<=BO<=14"
+  },
+  "full": {
+   "mode_a": "unslotted CSMA/CA, Imm-Ack, 3 retries, ED-scan least-used channel (upper-layer policy)",
+   "mode_b": "GTS, Imm-Ack, retries inside the GTS or next superframe"
+  },
+  "fair": {
+   "mode_a": "unslotted ALOHA, AR=0, random fixed channel",
+   "mode_b": "GTS, AR=0, random fixed channel"
+  }
+ },
+ "ieee802154_tsch": {
+  "timeslot_us": 10000,
+  "cca_offset_us": 1800,
+  "cca_us": 128,
+  "tx_offset_us": 2120,
+  "rx_offset_us": 1120,
+  "rx_ack_delay_us": 800,
+  "tx_ack_delay_us": 1000,
+  "rx_wait_us": 2200,
+  "ack_wait_us": 400,
+  "rxtx_us": 192,
+  "max_ack_us": 2400,
+  "max_tx_us": 4256,
+  "hopping_sequence": [
+   16,
+   17,
+   23,
+   18,
+   26,
+   15,
+   25,
+   22,
+   19,
+   11,
+   12,
+   13,
+   24,
+   14,
+   20,
+   21
+  ],
+  "channel": "HS[(ASN + chOff) mod 16]",
+  "ch_off": "sensor i: i mod 16; EB cell 0",
+  "max_retx": 3,
+  "mac_min_be": 1,
+  "mac_max_be": 7,
+  "mac_max_be_contiki": 5,
+  "queue_depth": 4,
+  "eb_period_s": 16,
+  "eb_psdu_octets": 41,
+  "enh_ack_psdu_octets": 13,
+  "enh_ack_us": 608,
+  "full": {
+   "arq": true,
+   "cca": false,
+   "cca_flag": true,
+   "cca_busy": "failed attempt",
+   "blacklist_flag": false,
+   "blacklist": {
+    "pdr_threshold": 0.8,
+    "window": 100,
+    "min_channels": 4
+   }
+  },
+  "fair": {
+   "arq": false,
+   "cca": false,
+   "hopping": true,
+   "strip_f6_option": "channel = HS[chOff]"
+  }
+ },
+ "ieee802156_nb": {
+  "channels": "fc = 2402 + nc MHz, nc = 0..78",
+  "symbol_rate_Hz": 600000,
+  "preamble_bits": 90,
+  "header_bits_full": 31,
+  "header_spread": 4,
+  "header_bits_fair": 19,
+  "rates_kbps": {
+   "121.4": {
+    "M": 2,
+    "S": 4
+   },
+   "242.9": {
+    "M": 2,
+    "S": 2
+   },
+   "485.7": {
+    "M": 2,
+    "S": 1
+   },
+   "971.4": {
+    "M": 4,
+    "S": 1
+   }
+  },
+  "full_default_rate_kbps": "121.4",
+  "fair_modulation": {
+   "default": "pi/2-DBPSK M=2 S=1",
+   "option": "pi/4-DQPSK M=4 S=1"
+  },
+  "bch_psdu": {
+   "n": 63,
+   "k": 51,
+   "t": 2
+  },
+  "bch_header": {
+   "n": 31,
+   "k": 19,
+   "t": 2
+  },
+  "mac_header_octets": 7,
+  "fcs_octets": 2,
+  "body_max_octets": 255,
+  "ack_psdu_octets": 9,
+  "beacon_body_octets": 17,
+  "airtime_full_s": "(90 + 124 + ceil((8*(9+L) + 12*ceil(8*(9+L)/51))*S/log2(M)))/600e3",
+  "airtime_fair_s": "(90 + 19 + ceil(8*(9+L)/log2(M)))/600e3",
+  "check_airtime_full_us": {
+   "121.4": [
+    996.7,
+    2303.3,
+    7610,
+    17796.7
+   ],
+   "242.9": [
+    676.7,
+    1330,
+    3983.3,
+    9076.7
+   ],
+   "485.7": [
+    516.7,
+    843.3,
+    2170,
+    4716.7
+   ],
+   "971.4": [
+    436.7,
+    600,
+    1263.3,
+    2536.7
+   ],
+   "L": [
+    0,
+    20,
+    100,
+    255
+   ]
+  },
+  "check_airtime_fair_us": {
+   "dbpsk": [
+    301.7,
+    568.3,
+    1635,
+    3701.7
+   ],
+   "dqpsk": [
+    241.7,
+    375,
+    908.3,
+    1941.7
+   ],
+   "L": [
+    0,
+    20,
+    100,
+    255
+   ]
+  },
+  "psifs_us": 75,
+  "pmifs_us": 20,
+  "pextraifs_us": 10,
+  "mtimeout_us": 30,
+  "csma_slot_us": 125,
+  "pcca_time_us": 105,
+  "ped_time_us": 13.3,
+  "channel_switch_us": 100,
+  "alloc_slot_us": "500 + L*500",
+  "superframe_slots": 32,
+  "slot_us": 10000,
+  "rap1_slots": 8,
+  "cw_min_max": {
+   "UP0": [
+    16,
+    64
+   ],
+   "UP1": [
+    16,
+    32
+   ],
+   "UP2": [
+    8,
+    32
+   ],
+   "UP3": [
+    8,
+    16
+   ],
+   "UP4": [
+    4,
+    16
+   ],
+   "UP5": [
+    4,
+    8
+   ],
+   "UP6": [
+    2,
+    8
+   ],
+   "UP7": [
+    1,
+    4
+   ]
+  },
+  "aloha_cp_max_min": {
+   "UP0": [
+    0.125,
+    0.0625
+   ],
+   "UP1": [
+    0.125,
+    0.0937
+   ],
+   "UP2": [
+    0.25,
+    0.0937
+   ],
+   "UP3": [
+    0.25,
+    0.125
+   ],
+   "UP4": [
+    0.375,
+    0.125
+   ],
+   "UP5": [
+    0.375,
+    0.1875
+   ],
+   "UP6": [
+    0.5,
+    0.1875
+   ],
+   "UP7": [
+    1,
+    0.25
+   ]
+  },
+  "retry_limit": 3,
+  "retry_sweep": [
+   0,
+   2,
+   3,
+   7
+  ],
+  "sens_draft_dBm": {
+   "121.4": -95,
+   "242.9": -93,
+   "485.7": -90,
+   "971.4": -86
+  },
+  "nf_dB": 10,
+  "impl_loss_dB": 6,
+  "srrc_rolloff": 0.3,
+  "acr_adjacent_dB": 0,
+  "acr_adjacent_case_dB": 20,
+  "full": {
+   "fec": true,
+   "spreading": "per rate",
+   "arq": "I-Ack, 3 retx",
+   "access": "scheduled 1-periodic allocation",
+   "channel": "ED scan min energy at start; rescan if PER > 0.1 over 10 superframes (flag)",
+   "beacon_shift_flag": false
+  },
+  "fair": {
+   "fec": false,
+   "spreading": 1,
+   "arq": false,
+   "access": "scheduled",
+   "channel": "static uniform random nc",
+   "hop_option": "random permutation, one hop per superframe",
+   "strip_option": "common channel"
+  }
+ },
+ "ieee802156_hbc": {
+  "center_MHz": 21,
+  "bw_MHz": 5.25,
+  "chip_rate_cps": 42000000,
+  "sf_by_rate_kbps": {
+   "1312.5": 8,
+   "656.25": 16,
+   "328.125": 32,
+   "164.0625": 64
+  },
+  "walsh_chips": 16,
+  "bits_per_symbol": 4,
+  "preamble_chips": 2048,
+  "sfd_chips": 512,
+  "sfd_ri_chips": 608,
+  "sfd_ri_chips_source": "IEEE 802.15.6-2012 10.5.2, Eq. 117: RI mode SFD/RI field (64-bit Gold code + 12 zero bits for the time offset) x SF 8 = 608 chips",
+  "header_chips": 8192,
+  "header_chips_ri_mode": 1024,
+  "pilot_chips": 512,
+  "pilot_period_symbols": 128,
+  "chips_42mcps": "2048 + 512 + header_chips + Ns*16*SF + floor(Ns/128)*512, Ns = ceil(8*(9+L)/4)",
+  "chips_walsh_time": "256 + 64 + 1024 + 32*(L+9)*S + 64*floor(32*(L+9)*S/2048), S = SF/8",
+  "check_airtime_us": {
+   "8": [
+    310.9,
+    432.8,
+    1913.9
+   ],
+   "16": [
+    365.7,
+    609.5,
+    3523
+   ],
+   "32": [
+    475.4,
+    963,
+    6741.3
+   ],
+   "64": [
+    694.9,
+    1670.1,
+    13177.9
+   ],
+   "L": [
+    0,
+    20,
+    255
+   ],
+   "sf8_L0_ri_mode": 142.5
+  },
+  "header_gain_dB": 9.03,
+  "mac_header_octets": 7,
+  "fcs_octets": 2,
+  "body_max_octets": 255,
+  "ack_psdu_octets": 9,
+  "psifs_us": 75,
+  "pmifs_us": 20,
+  "retry_limit": 3,
+  "retry_sweep": [
+   0,
+   3,
+   7
+  ],
+  "contention": "slotted Aloha (optional)",
+  "aloha_cp_max_min": {
+   "UP0": [
+    0.125,
+    0.0625
+   ],
+   "UP1": [
+    0.125,
+    0.0937
+   ],
+   "UP2": [
+    0.25,
+    0.0937
+   ],
+   "UP3": [
+    0.25,
+    0.125
+   ],
+   "UP4": [
+    0.375,
+    0.125
+   ],
+   "UP5": [
+    0.375,
+    0.1875
+   ],
+   "UP6": [
+    0.5,
+    0.1875
+   ],
+   "UP7": [
+    1,
+    0.25
+   ]
+  },
+  "power_total_mW": 5.2,
+  "intra_body_loss_dB": 60,
+  "inter_body_extra_dB": {
+   "low": 10,
+   "typical": 15,
+   "high": 20
+  },
+  "inter_body_slope_dB_per_decade": 20,
+  "full": {
+   "sf_default": 8,
+   "sf_sweep": [
+    16,
+    32,
+    64
+   ],
+   "header_rate": "164 kb/s",
+   "ri_mode_flag": false,
+   "arq": "I-Ack, 3 retx",
+   "rate_rule": "highest rate with predicted PSR >= 0.99"
+  },
+  "fair": {
+   "sf": 1,
+   "header_rate": "PSDU rate",
+   "arq": false,
+   "mac_header_fcs": true
+  }
+ },
+ "smartban": {
+  "channels": "DCH d=0..36 on the BLE data grid; CCH 2402/2426/2480 MHz",
+  "symbol_rate_Hz": 1000000,
+  "ppdu_overhead_bits": 104,
+  "airtime_us": "Nrep*(104 + L_PSDU)",
+  "l_mpdu_bits": "64 + 8*LF",
+  "bch_psdu": {
+   "n": 127,
+   "k": 113,
+   "t": 2,
+   "parity": 14
+  },
+  "bch_header": {
+   "n": 36,
+   "k": 22,
+   "t": 2
+  },
+  "header_bits": 40,
+  "ack_us": 168,
+  "ack_us_standard_formula": 120,
+  "d_beacon_us": 272,
+  "c_beacon_us": 288,
+  "tifs_us": 150,
+  "tsch_us": 16,
+  "tmin_us": 625,
+  "lslot": [
+   1,
+   2,
+   4,
+   8,
+   16,
+   32
+  ],
+  "slot_fit": "Nrep*(104 + L_PSDU) <= TS - TMUA - 168 - 300",
+  "lf_max_octets_nrep1": {
+   "1": [
+    0,
+    0
+   ],
+   "2": [
+    76,
+    66
+   ],
+   "4": [
+    233,
+    205
+   ],
+   "8": [
+    545,
+    484
+   ],
+   "16": [
+    1170,
+    1039
+   ],
+   "32": [
+    2420,
+    2152
+   ],
+   "order": "[uncoded, bch]"
+  },
+  "ibi": "slot 0 D-Beacon, 1 slot per node, 2 C/M slots, NI inactive slots",
+  "cm_slots": 2,
+  "max_nodes": 16,
+  "tmua_us": {
+   "emergency": 0,
+   "owner": 16,
+   "non_owner": 32,
+   "cm": 16
+  },
+  "ed_threshold_dBm": -75,
+  "aloha_cp_max_min": {
+   "UP0": [
+    0.125,
+    0.0625
+   ],
+   "UP1": [
+    0.25,
+    0.0625
+   ],
+   "UP2": [
+    0.5,
+    0.125
+   ],
+   "UP3": [
+    1,
+    0.5
+   ]
+  },
+  "be_min": 3,
+  "be_max": 5,
+  "rt_max": 3,
+  "rt_max_pca": 3,
+  "retry_limit": 1,
+  "retry_sweep": [
+   1,
+   3
+  ],
+  "ber": {
+   "default": "common GFSK curve 0.5*exp(-g/2), NF+L_impl 8.1 dB",
+   "etsi_mode": "Pb = Q(sqrt(2*eps*gb)), gb = Prx + 174 - 13 - 60 - 6 dB, eps 1 or 0.78",
+   "bch_calibration_dB": [
+    1.1,
+    1.6
+   ],
+   "ci_co_dB_assumed": 21
+  },
+  "full": {
+   "fec": true,
+   "nrep": 1,
+   "ack_policy": 0,
+   "retransmission": "C/M slots same IBI, else next own slot",
+   "mca_flag": true,
+   "channel": "CCH scan >= TD, free DCH, else least used",
+   "migration": {
+    "fail_ratio": 0.2,
+    "window_ibi": 10,
+    "switch_after_beacons": 2
+   },
+   "adaptive_nrep_flag": false
+  },
+  "fair": {
+   "fec": false,
+   "nrep": 1,
+   "ack": false,
+   "mca": false,
+   "channel": "uniform random DCH, fixed"
+  }
+ },
+ "ant": {
+  "airtime_us": 144,
+  "ack_airtime_us": 144,
+  "payload_octets": 8,
+  "frame_octets": 18,
+  "crc": "CRC-16 0x1021 init 0xFFFF",
+  "turnaround_us": 130,
+  "rx_window_us": 176,
+  "slot_offsets_us": {
+   "master_tx": [
+    0,
+    144
+   ],
+   "slave_reply": [
+    274,
+    418
+   ]
+  },
+  "period": "N/32768 s, N=round(32768/f)",
+  "n_clamp": {
+   "nrf24ap2": [
+    171,
+    65535
+   ],
+   "cc2570": [
+    164,
+    65535
+   ]
+  },
+  "default_period_counts": 8192,
+  "hrm_period_counts": 8070,
+  "broadcast_ceiling_kbps": {
+   "nrf24ap2": 12.3,
+   "cc2570": 12.8
+  },
+  "burst_spacing_us": 3200,
+  "burst_retries": 5,
+  "adv_burst_retries": 20,
+  "adv_burst_hop_freqs": 6,
+  "adv_burst_airtime_us": {
+   "8": 144,
+   "16": 208,
+   "24": 272
+  },
+  "freq_default_MHz": 2457,
+  "freq_pool_MHz": "2403..2480 excluding 2450 and 2457",
+  "agility_freqs_MHz": [
+   2403,
+   2439,
+   2475
+  ],
+  "drop_to_search": "<2 Hz: 4 misses; >2 Hz: 2 s of misses",
+  "search_s": {
+   "low": 5,
+   "high": 25
+  },
+  "hp_search_loss_p": 0.5,
+  "max_channels": {
+   "nrf24ap2": 8,
+   "s212": 15
+  },
+  "sens_dBm": {
+   "nrf24ap2": -85,
+   "cc2570": -86,
+   "nrf52832": -93
+  },
+  "nf_plus_limpl_dB": {
+   "nrf24ap2": 18.1,
+   "nrf52832": 10.1,
+   "cc2570": 17.1
+  },
+  "bits_at_risk": 136,
+  "ci_co_dB": 12,
+  "acr_dB": {
+   "1": 4,
+   "2": 33,
+   "3": 42,
+   "6": 52,
+   "25": 62
+  },
+  "full": {
+   "data": "acknowledged, f_ch = 1.25*f_data",
+   "attempts": 6,
+   "listen_at_open": true,
+   "guard_us": 500,
+   "iso_retime_flag": false,
+   "iso_shift_us": 250,
+   "agility_flag": false,
+   "agility_trigger_unacked": 8
+  },
+  "fair": {
+   "data": "broadcast at f_data",
+   "attempts": 1,
+   "listen_at_open": false,
+   "retime": false,
+   "freq": "2457 MHz or random fixed"
+  }
+ },
+ "esb": {
+  "optional": true,
+  "airtime": "(8*(1+A+N+C)+9)/Rb",
+  "example_us": {
+   "1M": {
+    "data": 137,
+    "ack": 73
+   },
+   "2M": {
+    "data": 68.5,
+    "ack": 36.5
+   }
+  },
+  "address_octets": 5,
+  "crc_octets": 2,
+  "payload_max_octets": {
+   "nrf24l01p": 32,
+   "nrf5": 252
+  },
+  "turnaround_us": 130,
+  "ack_timeout_us": 250,
+  "ard_us": {
+   "min": 250,
+   "max": 4000,
+   "step": 250
+  },
+  "arc_max": 15,
+  "full": {
+   "rate": "2M (also 1M)",
+   "arc": 3,
+   "ard_us": 600,
+   "arc_sweep": [
+    3,
+    15
+   ]
+  },
+  "fair": {
+   "arc": 0
+  },
+  "ci_dB": {
+   "1M": {
+    "1": 8,
+    "2": -21,
+    "co": 12
+   },
+   "2M": {
+    "2": 4,
+    "4": -18,
+    "co": 11
+   }
+  },
+  "sens_dBm": {
+   "1M": -85,
+   "2M": -82,
+   "250k": -94
+  }
+ },
+ "bcc": {
+  "preamble_chips": 256,
+  "sfd_chips": 64,
+  "header_chips": 128,
+  "header_bits": 32,
+  "chips_per_octet": 32,
+  "pilot_chips": 64,
+  "pilot_period_chips": 2048,
+  "chips": "448 + 32*L + 64*floor(32*L/2048)",
+  "chips_L255": 8800,
+  "chips_L255_on_air_file": 8864,
+  "chips_per_bit_L255": 4.314,
+  "payload_max_octets": 255,
+  "payload_crc": false,
+  "fcs_switch_chips": 64,
+  "header_crc": "CRC-8 0xD5 bit-per-byte, dmin 2",
+  "spreading": false,
+  "walsh": {
+   "n": 16,
+   "dmin": 8,
+   "p_ok_4err": 0.731,
+   "p_ok_5err": 0.327
+  },
+  "sync_max_errors_of_64": 7,
+  "ber": {
+   "chip": "0.5*exp(-gc/2)",
+   "sim_offset_dB": 0.35,
+   "ook": "0.5*exp(-gc/4)",
+   "psr": "Q64^(2+P) * Ps_ok^(8+2L), P = floor(32L/2048)"
+  },
+  "ec_n0_error_free_dB": 8,
+  "per_bit_offset_dB_L255": 6.35,
+  "rc_sweep_cps": [
+   50000,
+   200000,
+   500000,
+   2000000
+  ],
+  "tone_bw": "4*Rc",
+  "tdma": {
+   "slot_guard_chips": 10,
+   "sync_chips": 8
+  },
+  "n0_V2_per_Hz": 8e-19,
+  "nf_dB": [
+   10,
+   20,
+   30
+  ],
+  "drive_V": 1,
+  "contact_model": {
+   "good_dwell_chips": 35000,
+   "bad_dwell_chips": 13000,
+   "depth_dB": 12,
+   "ec_n0_good_dB": 14
+  },
+  "measured_psr_ook_50k": [
+   0.66,
+   0.72
+  ],
+  "inter_body": "isolated",
+  "inter_body_sensitivity_dB": [
+   40,
+   60
+  ]
+ },
+ "energy": {
+  "nrf52840": {
+   "tx_0dBm": 6.4,
+   "tx_p8dBm": 16.4,
+   "tx_m40dBm": 3.83,
+   "tx_0dBm_ldo": 10.8,
+   "tx_154": 6.4,
+   "rx_1M": 6.26,
+   "rx_2M": 6.86,
+   "rx_154": 6.53,
+   "rx_1M_ldo": 10.1,
+   "radio_only_tx_by_dBm": {
+    "0": 4.8,
+    "4": 9.6,
+    "8": 14.8,
+    "-40": 2.3,
+    "-20": 2.7,
+    "-8": 3.3,
+    "-4": 3.1
+   },
+   "system_overhead": 1.6,
+   "startup_rx": 5.3,
+   "startup_tx": 6.8,
+   "ramp_us": {
+    "154": 130,
+    "ble": 140,
+    "ble_fast": 40,
+    "154_fast": 40
+   },
+   "tx_disable_us": {
+    "154": 21,
+    "1M": 6,
+    "2M": 4
+   },
+   "turnaround_154_us": 40,
+   "sleep_uA": {
+    "on_ram": 3.16,
+    "on_noram": 1.5,
+    "off": 0.4
+   }
+  },
+  "nrf52832": {
+   "tx_0dBm": 5.3,
+   "tx_p4dBm": 7.5,
+   "rx_1M": 5.4,
+   "rx_2M": 5.8,
+   "startup_tx": 4,
+   "startup_rx": 3.5,
+   "ramp_us": 140
+  },
+  "nrf54l15": {
+   "tx_0dBm": 4.8,
+   "rx_1M": 3.4,
+   "sleep_uA": [
+    0.7,
+    2.9
+   ],
+   "smartban_impl_measured_1v8": {
+    "tx": 5.83,
+    "rx": 12.43,
+    "off": 0.54
+   }
+  },
+  "cc2652r": {
+   "tx_0dBm": 7,
+   "tx_p5dBm": 9.2,
+   "rx": 6.9,
+   "standby_uA": 0.94
+  },
+  "cc2340r5": {
+   "tx_0dBm": 5.1,
+   "tx_p8dBm": 10.7,
+   "rx_1M": 5.3,
+   "standby_uA": 0.71
+  },
+  "efr32bg22": {
+   "tx_0dBm": 4.3,
+   "rx_1M": 3.8,
+   "rx_2M": 4.2,
+   "rx_125k": 4,
+   "em2_uA": 1.4
+  },
+  "efr32mg24": {
+   "tx_0dBm": 5,
+   "rx_1M": 4.7,
+   "rx_2M": 5.4,
+   "rx_154": 5.4,
+   "rx_125k": 4.9,
+   "em2_uA": 1.3
+  },
+  "nrf24ap2_uC_per_msg": {
+   "master_bidir": 27,
+   "tx_only": 17,
+   "ack_tx": 35,
+   "slave_rx": 21,
+   "ack_rx": 26,
+   "base_uA": 3,
+   "burst_mA": 5.9
+  },
+  "s212_uC_per_master_slot": [
+   3.3,
+   3.7
+  ],
+  "nrf24l01p": {
+   "tx_0dBm": 11.3,
+   "rx_1M": 13.1,
+   "rx_2M": 13.5,
+   "settle_tx": 8,
+   "settle_rx": 8.9,
+   "settle_us": 130
+  },
+  "hbc_ic_total_mW": 5.2,
+  "bcc_mW": {
+   "low": {
+    "tx": 0.5,
+    "rx": 2.7
+   },
+   "typical": {
+    "tx": 2,
+    "rx": 2.4
+   },
+   "high": {
+    "tx": 59.4,
+    "rx": 59.4
+   }
+  },
+  "bcc_wake_us": {
+   "low": 20,
+   "typical": 100,
+   "high": 1000
+  },
+  "wake_event": {
+   "us": 300,
+   "mA": 3
+  },
+  "sleep_default_uA": 3.16,
+  "chip_by_protocol": {
+   "ble5": "nrf52840",
+   "smartban": "nrf52840 1M",
+   "ieee802156_nb": "nrf52840 1M",
+   "ant": "nrf52840 1M (legacy: nrf24ap2)",
+   "ieee802154": "nrf52840 154 (alt cc2652r)",
+   "ieee802156_hbc": "5.2 mW total, TX=RX=2.6 mW",
+   "bcc": "bcc_mW"
+  },
+  "battery": {
+   "capacity_mAh": 235,
+   "nominal_V": 3,
+   "cutoff_V": 2,
+   "k": {
+    "typical": 0.9,
+    "conservative": 0.8,
+    "poor": 0.5
+   },
+   "self_discharge_per_year": 0.01,
+   "peak_flag_mA": 15,
+   "bulk_cap_uF": 100
+  }
+ },
+ "channel": {
+  "on_body": {
+   "median_dB": {
+    "low": 54,
+    "typical": 68,
+    "high": 82
+   },
+   "static_sigma_dB": {
+    "low": 3.6,
+    "typical": 4.5,
+    "high": 6.9
+   },
+   "fade_sigma_dB": {
+    "low": 2.8,
+    "typical": 3.5,
+    "high": 4.3
+   },
+   "generic_sigma_total_dB": 9.6,
+   "per_link_dB": {
+    "head-belt": 54,
+    "belt-wrist": 56,
+    "head-wrist": 60,
+    "chest-wrist_same": 64,
+    "chest-wrist_opp": 70,
+    "chest-ankle_same": 75,
+    "chest-ankle_opp": 82,
+    "chest-back": 78,
+    "hip-chest": 62.5,
+    "hip-head": 70
+   },
+   "cm3a_hospital": {
+    "a": 6.6,
+    "b": 36.1,
+    "sigma": 3.8,
+    "d_unit": "mm"
+   },
+   "cm3b": {
+    "P0_lin": 0.0026,
+    "m_per_m": 46.09,
+    "P1_lin": 7.4683e-08,
+    "sigma": 3.6
+   },
+   "ricean_K_dB": "30.6 - 0.43*PL_dB + N(0, 3.4)"
+  },
+  "inter_body": {
+   "formula": "PL0 + 10*n*log10(max(d,0.3)/1) + X + L_sh*min(m_blk,2) + fade",
+   "low": {
+    "PL0": 42,
+    "n": 1.3,
+    "sigma": 3,
+    "L_sh": 6
+   },
+   "typical": {
+    "PL0": 48,
+    "n": 2,
+    "sigma": 5,
+    "L_sh": 15
+   },
+   "high": {
+    "PL0": 55,
+    "n": 3,
+    "sigma": 8,
+    "L_sh": 30
+   },
+   "fade_sigma_dB": 5,
+   "d_min_m": 0.3
+  },
+  "room": {
+   "area_per_person_m2": {
+    "ward": [
+     18.1,
+     16,
+     9.3
+    ],
+    "gym": [
+     43,
+     9.3,
+     2.3
+    ],
+    "office": [
+     18.6,
+     12,
+     8
+    ],
+    "order": "[low, typical, high density]"
+   },
+   "min_spacing_m": 0.6,
+   "torso_radius_m": 0.15,
+   "mobility_epoch_s": 1,
+   "mobile": false,
+   "nodes_body_frame_m": {
+    "hub_chest": [
+     0.15,
+     0,
+     1.3
+    ],
+    "head": [
+     0.1,
+     0,
+     1.65
+    ],
+    "belt": [
+     0.15,
+     0,
+     1
+    ],
+    "left_wrist": [
+     0.05,
+     0.3,
+     0.9
+    ],
+    "right_wrist": [
+     0.05,
+     -0.3,
+     0.9
+    ],
+    "left_ankle": [
+     0.05,
+     0.12,
+     0.1
+    ],
+    "right_ankle": [
+     0.05,
+     -0.12,
+     0.1
+    ],
+    "back": [
+     -0.15,
+     0,
+     1.3
+    ]
+   }
+  },
+  "noise": {
+   "generic_nf_dB": [
+    4,
+    6,
+    10
+   ],
+   "generic_limpl_dB": [
+    0,
+    2,
+    5
+   ]
+  },
+  "bcc_inter_body": "isolated (sensitivity +40/+60 dB over intra-body)",
+  "hbc_inter_body": "intra 60 dB + 10/15/20 dB at 1 m, 20 dB/decade",
+  "sanity": {
+   "on_body_dB": 68,
+   "interferer_1m_dB": 48,
+   "sir_cochannel_dB": -20
+  }
+ }
+}

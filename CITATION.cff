@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this model, cite the software and the thesis below."
+type: software
+title: "Galvanic body-coupled channel: population model and simulator"
+license: MIT
+authors:
+  - family-names: Ormanis
+    given-names: Juris
+    affiliation: "Institute of Electronics and Computer Science"
+    orcid: "https://orcid.org/0000-0003-2336-7115"
+keywords:
+  - body-coupled communication
+  - galvanic coupling
+  - body area network
+  - IEEE 802.15.6
+  - channel model
+  - network simulation
+  - Castalia
+  - OMNeT++
+references:
+  - type: thesis
+    title: "Human Body As Data Transmission Medium"
+    authors:
+      - family-names: Ormanis
+        given-names: Juris
+    institution:
+      name: "University of Latvia"
+    year: 2026
+  - type: article
+    title: "Dataset on the human body as a signal propagation medium for body coupled communication"
+    authors:
+      - family-names: Ormanis
+        given-names: Juris
+    journal: "Data in Brief"
+    volume: 52
+    start: 109892
+    year: 2024
+    doi: 10.1016/j.dib.2023.109892
+  - type: data
+    title: "Dataset on the human body as a signal propagation medium for body coupled communication"
+    authors:
+      - family-names: Ormanis
+        given-names: Juris
+    doi: 10.5281/zenodo.8214497
+    year: 2023

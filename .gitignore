@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+PhD-DataProcessing/
+python_simulation/coexistence/results/
