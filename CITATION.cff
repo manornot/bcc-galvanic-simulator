@@ -17,6 +17,13 @@ keywords:
   - network simulation
   - Castalia
   - OMNeT++
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24062434
+    description: "Zenodo record of version 2.2.1"
+  - type: doi
+    value: 10.5281/zenodo.24061739
+    description: "Zenodo record of all versions"
 references:
   - type: thesis
     title: "Human Body As Data Transmission Medium"
